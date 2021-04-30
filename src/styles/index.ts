@@ -26,4 +26,16 @@ export const styles = create({
     alignItems: "center",
     backgroundColor: "transparent",
   },
+  setting: {
+    marginBottom: 10,
+  },
+  setting_title: {
+    fontSize: 18,
+    margin: 5,
+  },
+  setting_row: {
+    flexDirection: "row",
+    marginLeft: 15,
+    marginRight: 15,
+  },
 });

@@ -1,10 +1,12 @@
-import React, { FunctionComponent } from "react";
-import { useEffect, useRef, useState } from "react";
+import React from "react";
+import { FunctionComponent, useRef, useState } from "react";
+import { Window, View, Button, Dialog } from "@nodegui/react-nodegui";
 import { QMainWindow, WidgetAttribute } from "@nodegui/nodegui";
 import { NativeRawPointer } from "@nodegui/nodegui/dist/lib/core/Component";
-import { Window, View, Text, Button } from "@nodegui/react-nodegui";
 import { WindowType, QMouseEvent, QIcon, QSize } from "@nodegui/nodegui";
 import { stores, storeContext, useStore } from "./stores";
+import { SettingView } from "./views/Setting";
+import { HomeView } from "./views/Home";
 import setting from "./icons/setting.svg";
 import { observer } from "mobx-react";
 import { styles } from "./styles";
@@ -23,6 +25,7 @@ const App: FunctionComponent = observer(() => {
   const store = useStore();
   const winRef = useRef<QMainWindow>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [visible, setVisible] = useState(false);
 
   const handleMouseEvent = (e?: NativeRawPointer<"QEvent">) => {
     if (!e || !winRef.current) {
@@ -47,14 +50,10 @@ const App: FunctionComponent = observer(() => {
     MouseButtonPress: handleMouseEvent,
   };
 
-  const onClickedSetting = () => {
-    console.log("onClickedSetting");
-    store.enableTimer();
+  const onUpdate = (data: Array<OptionT>) => {
+    store.updateOptions(data);
+    setVisible(false);
   };
-
-  // useEffect(() => {
-  //   store.enableTimer();
-  // }, []);
 
   return (
     <Window
@@ -66,20 +65,21 @@ const App: FunctionComponent = observer(() => {
       on={onHandle}
     >
       <View style={styles.view}>
-        {store.options.map((e, i) => {
-          return (
-            <React.Fragment key={e.name}>
-              <Text style={styles.text}>{e.display_name || "--"}:</Text>
-              <Text style={styles.value}>{e.display_value || "--"}</Text>
-            </React.Fragment>
-          );
-        })}
+        <HomeView />
         <Button
           icon={new QIcon(setting)}
           iconSize={new QSize(25, 25)}
-          on={{ clicked: onClickedSetting }}
+          on={{ clicked: () => setVisible(true) }}
           style={styles.button}
         />
+        <Dialog
+          open={visible}
+          windowTitle={"Setting"}
+          minSize={{ width: 600, height: 420 }}
+          on={{ Close: () => setVisible(false) }}
+        >
+          <SettingView options={store.options} onUpdate={onUpdate} />
+        </Dialog>
       </View>
     </Window>
   );

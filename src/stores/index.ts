@@ -10,6 +10,13 @@ export class AppState {
 
   @action
   updateOptions(data: Array<OptionT>) {
+    if (this.enable) {
+      for (let key in this.timer) {
+        clearInterval(this.timer[key]);
+        delete this.timer[key];
+      }
+      this.enable = false;
+    }
     this.options = data;
   }
 
