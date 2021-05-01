@@ -74,6 +74,7 @@ export const styles = create({
     backgroundColor: "#FF5959",
     color: "#fff",
     borderRadius: 3,
+    padding: 5,
   },
   setting_item: {
     flexDirection: "row",

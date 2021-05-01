@@ -4,6 +4,9 @@ import { View, Text, CheckBox, Button } from "@nodegui/react-nodegui";
 import { QFileDialog } from "@nodegui/nodegui";
 import { nativeErrorHandler } from "../utils";
 import { styles } from "../styles";
+import os from "os";
+
+const isWin = os.platform() === "win32";
 
 type Props = {
   options: Array<OptionT>;
@@ -37,10 +40,10 @@ export class SettingView extends React.Component<Props, State> {
   public computeHeight(options: Array<OptionT>) {
     let height = 160;
     for (let i = 0; i < options.length; i++) {
-      height = height + 270;
+      height = height + (isWin ? 240 : 270);
       const item = options[i];
       for (let n = 0; n < item.notices.length; n++) {
-        height = height + 140;
+        height = height + (isWin ? 130 : 140);
       }
     }
     return height;
@@ -123,8 +126,8 @@ export class SettingView extends React.Component<Props, State> {
       <View style={styles.setting}>
         <ScrollArea style={styles.setting}>
           <View
-            style={"paddingTop: 15px; paddingBottom: 15px;"}
-            size={{ height: height, width: 415 }}
+            style={"padding-top: 15px; padding-bottom: 15px;"}
+            size={{ height: height, width: isWin ? 400 : 410 }}
           >
             <View style={styles.setting_row}>
               <Text style={styles.setting_text}>启动/停止定时器快捷键:</Text>

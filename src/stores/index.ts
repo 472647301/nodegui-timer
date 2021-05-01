@@ -1,10 +1,10 @@
 import React from "react";
 import { action, configure, observable, runInAction } from "mobx";
-import { options } from "../config";
+import { loadCookie } from "../utils";
 
 export class AppState {
   @observable
-  options: Array<OptionT> = options;
+  options: Array<OptionT> = loadCookie();
   timer: { [key: string]: NodeJS.Timeout } = {};
   enable = false;
 
