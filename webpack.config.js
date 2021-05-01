@@ -45,7 +45,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.node$/,
+        test: /\.node$/i,
         use: [
           {
             loader: "native-addon-loader",

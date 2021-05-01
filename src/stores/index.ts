@@ -1,10 +1,41 @@
 import React from "react";
 import { action, configure, observable, runInAction } from "mobx";
-import { loadCookie } from "../utils";
+import { loadCookie, fetchCodeKey } from "../utils";
+import robot from "robotjs";
+
+export function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export async function runScript(list: Array<ScriptT>) {
+  for (let i = 0; i < list.length; i++) {
+    const item = list[i];
+    switch (item.type) {
+      case "keydown":
+        robot.keyToggle(fetchCodeKey(item.rawcode), "down");
+        break;
+      case "keyup":
+        robot.keyToggle(fetchCodeKey(item.rawcode), "up");
+        break;
+      case "mouseclick":
+        robot.moveMouse(item.x, item.y);
+        if (item.button === 1) {
+          robot.mouseClick("left");
+        } else if (item.button === 2) {
+          robot.mouseClick("right");
+        }
+        break;
+      case "mousemove":
+        robot.moveMouse(item.x, item.y);
+        break;
+    }
+    item.delay && (await delay(item.delay));
+  }
+}
 
 export class AppState {
   @observable
-  options: Array<OptionT> = loadCookie();
+  options: Array<OptionT> = loadCookie().options;
   timer: { [key: string]: NodeJS.Timeout } = {};
   enable = false;
 

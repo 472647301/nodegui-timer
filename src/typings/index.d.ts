@@ -34,3 +34,34 @@ interface NoticeT {
   key_code: string;
   file_path: string;
 }
+
+interface MouseEvt {
+  button: number;
+  clicks: number;
+  x: number;
+  y: number;
+  type: "mouseclick" | "mousedown" | "mouseup" | "mousemove" | "mousedrag";
+}
+
+interface Mousewheel {
+  amount: number;
+  clicks: number;
+  direction: number;
+  rotation: number;
+  type: "mousewheel";
+  x: number;
+  y: number;
+}
+
+interface ScriptT {
+  x: number;
+  y: number;
+  rawcode: number;
+  type: KeyCodeEvt["type"] | MouseEvt["type"] | "mousewheel";
+  delay: number;
+  /**
+   * 1 - 鼠标左键
+   * 2 - 鼠标右键
+   */
+  button: number;
+}

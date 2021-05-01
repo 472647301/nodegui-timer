@@ -1,11 +1,14 @@
 import React from "react";
+import { QFileDialog } from "@nodegui/nodegui";
 import { ScrollArea, LineEdit } from "@nodegui/react-nodegui";
 import { View, Text, CheckBox, Button } from "@nodegui/react-nodegui";
-import { QFileDialog } from "@nodegui/nodegui";
-import { nativeErrorHandler } from "../utils";
+import { nativeErrorHandler, keyboard } from "../utils";
+import { loadCookie, saveCookie } from "../utils";
+import { iohookScript } from "../iohook";
 import { styles } from "../styles";
 import os from "os";
 
+const cookies = loadCookie();
 const isWin = os.platform() === "win32";
 
 type Props = {
@@ -36,6 +39,8 @@ export class SettingView extends React.Component<Props, State> {
     "keyboard",
     "script",
   ];
+  private timer_shortcut = cookies.timer_shortcut;
+  private script_shortcut = cookies.script_shortcut;
 
   public computeHeight(options: Array<OptionT>) {
     let height = 160;
@@ -54,9 +59,32 @@ export class SettingView extends React.Component<Props, State> {
       nativeErrorHandler("至少需要开启一个定时器");
       return;
     }
+    const timer_key = this.timer_shortcut.toLocaleLowerCase();
+    const script_key = this.script_shortcut.toLocaleLowerCase();
+    if (!keyboard[timer_key]) {
+      nativeErrorHandler("请输入正确的启动/停止定时器快捷键");
+      return;
+    }
+    if (!keyboard[script_key]) {
+      nativeErrorHandler("请输入正确的启动/停止脚本录制快捷键");
+      return;
+    }
     if (this.props.onUpdate) {
       this.props.onUpdate(this.options);
     }
+    if (
+      cookies.script_shortcut !== this.script_shortcut ||
+      cookies.timer_shortcut !== this.timer_shortcut
+    ) {
+      iohookScript.unregister();
+      iohookScript.registerTimer(cookies.timer_shortcut);
+      iohookScript.registerScript(this.script_shortcut);
+    }
+    saveCookie({
+      options: this.options,
+      timer_shortcut: timer_key,
+      script_shortcut: script_key,
+    });
   };
 
   public addOptions = () => {
@@ -131,11 +159,19 @@ export class SettingView extends React.Component<Props, State> {
           >
             <View style={styles.setting_row}>
               <Text style={styles.setting_text}>启动/停止定时器快捷键:</Text>
-              <LineEdit style={styles.setting_input} text={"F5"} />
+              <LineEdit
+                style={styles.setting_input}
+                text={this.timer_shortcut.toLocaleUpperCase()}
+                on={{ textChanged: (text) => (this.timer_shortcut = text) }}
+              />
             </View>
             <View style={styles.setting_row}>
               <Text style={styles.setting_text}>启动/停止脚本录制快捷键:</Text>
-              <LineEdit style={styles.setting_input} text={"F6"} />
+              <LineEdit
+                style={styles.setting_input}
+                text={this.script_shortcut.toLocaleUpperCase()}
+                on={{ textChanged: (text) => (this.script_shortcut = text) }}
+              />
             </View>
             <View style={styles.setting_row}>
               <Text style={styles.setting_text}>定时器配置:</Text>

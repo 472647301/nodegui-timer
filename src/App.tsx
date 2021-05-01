@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FunctionComponent, useRef, useState } from "react";
 import { Window, View, Button, Dialog } from "@nodegui/react-nodegui";
 import { QMainWindow, WidgetAttribute } from "@nodegui/nodegui";
@@ -8,9 +8,13 @@ import { stores, storeContext, useStore } from "./stores";
 import { SettingView } from "./views/Setting";
 import { HomeView } from "./views/Home";
 import setting from "./icons/setting.svg";
+import { iohookScript } from "./iohook";
 import { observer } from "mobx-react";
+import { loadCookie } from "./utils";
 import { styles } from "./styles";
 import { size } from "./config";
+
+const cookies = loadCookie();
 
 const windowFlags = {
   [WindowType.Widget]: true,
@@ -54,6 +58,12 @@ const App: FunctionComponent = observer(() => {
     store.updateOptions(data);
     setVisible(false);
   };
+
+  useEffect(() => {
+    iohookScript.registerTimer(cookies.timer_shortcut);
+    iohookScript.registerScript(cookies.script_shortcut);
+    iohookScript.init();
+  }, []);
 
   return (
     <Window
