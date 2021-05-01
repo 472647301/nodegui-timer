@@ -75,7 +75,7 @@ const App: FunctionComponent = observer(() => {
         <Dialog
           open={visible}
           windowTitle={"Setting"}
-          minSize={{ width: 600, height: 420 }}
+          minSize={{ width: 420, height: 480 }}
           on={{ Close: () => setVisible(false) }}
         >
           <SettingView options={store.options} onUpdate={onUpdate} />
