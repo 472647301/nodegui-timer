@@ -16,9 +16,6 @@ if (os.platform() === "win32") {
           from: "./node_modules/vlc-static/bin",
           to: "./bin",
         },
-        {
-          from: "./abc.mp3",
-        },
       ],
     })
   );

@@ -54,6 +54,14 @@ export const styles = create({
     fontSize: 18,
     borderRadius: 5,
   },
+  setting_help: {
+    flex: 1,
+    height: 45,
+    backgroundColor: "#8B7765",
+    color: "#fff",
+    fontSize: 18,
+    borderRadius: 5,
+  },
   setting_row: {
     flexDirection: "row",
     marginLeft: 15,

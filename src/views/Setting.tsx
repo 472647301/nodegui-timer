@@ -5,6 +5,7 @@ import { View, Text, CheckBox, Button } from "@nodegui/react-nodegui";
 import { nativeErrorHandler, keyboard } from "../utils";
 import { loadCookie, saveCookie } from "../utils";
 import { iohookScript } from "../iohook";
+import { exec } from "child_process";
 import { styles } from "../styles";
 import path from "path";
 import os from "os";
@@ -148,6 +149,12 @@ export class SettingView extends React.Component<Props, State> {
     const file = value[0];
     this.changePerformEvent(parentid, index, "file_path", file);
     this.forceUpdate();
+  };
+
+  public onViewHelp = () => {
+    exec(
+      "start https://gitee.com/thiszhuwenbo/nodegui-timer/blob/main/help.md"
+    );
   };
 
   public render() {
@@ -351,6 +358,12 @@ export class SettingView extends React.Component<Props, State> {
           </View>
         </ScrollArea>
         <View style={styles.setting_footer}>
+          <Button
+            text={"在线文档"}
+            style={styles.setting_help}
+            on={{ clicked: this.onViewHelp }}
+          />
+          <View style={"width: 10px;"} />
           <Button
             text={"更新配置"}
             style={styles.setting_button}
