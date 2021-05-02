@@ -1,6 +1,7 @@
 import React from "react";
 import { Renderer } from "@nodegui/react-nodegui";
 import { nativeErrorHandler } from "./utils";
+import robot from "robotjs";
 import App from "./App";
 
 process.title = "Timer";
@@ -16,3 +17,6 @@ process.on("unhandledRejection", (reason) => {
 });
 
 Renderer.render(<App />);
+
+robot.setMouseDelay(300);
+robot.setKeyboardDelay(300);

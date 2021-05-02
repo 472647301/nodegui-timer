@@ -1,7 +1,11 @@
 import React from "react";
 import { action, configure, observable, runInAction } from "mobx";
 import { loadCookie, fetchCodeKey } from "../utils";
+import { Audic } from "../audic";
+import shelljs from "shelljs";
 import robot from "robotjs";
+import path from "path";
+import fs from "fs";
 
 export function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -33,6 +37,39 @@ export async function runScript(list: Array<ScriptT>) {
   }
 }
 
+export function runNotices(value: number, list: OptionT["notices"]) {
+  for (let i = 0; i < list.length; i++) {
+    const item = list[i];
+    if (!item.type) {
+      continue;
+    }
+    if (item.target !== value) {
+      continue;
+    }
+    if (item.type === "keyboard" && !item.key_code) {
+      continue;
+    }
+    if (item.type !== "keyboard" && !item.file_path) {
+      continue;
+    }
+    switch (item.type) {
+      case "audio":
+        shelljs.cd(path.dirname(item.file_path!));
+        console.log(path.dirname(item.file_path!), path.basename(item.file_path!));
+        new Audic(path.basename(item.file_path!)).play();
+        break;
+      case "keyboard":
+        robot.keyToggle(item.key_code!.toLocaleUpperCase(), "down");
+        robot.keyToggle(item.key_code!.toLocaleUpperCase(), "up");
+        break;
+      case "script":
+        const text = fs.readFileSync(item.file_path!, "utf8");
+        runScript(JSON.parse(text));
+        break;
+    }
+  }
+}
+
 export class AppState {
   @observable
   options: Array<OptionT> = loadCookie().options;
@@ -47,6 +84,9 @@ export class AppState {
         delete this.timer[key];
       }
       this.enable = false;
+    }
+    for (let i = 0; i < data.length; i++) {
+      data[i].display_value = data[i].value;
     }
     this.options = data;
   }
@@ -87,6 +127,7 @@ export class AppState {
         } else {
           item.display_value = item.value - 1;
         }
+        runNotices(item.display_value, item.notices);
       });
     }, 1000);
   }

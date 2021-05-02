@@ -6,6 +6,7 @@ import { nativeErrorHandler, keyboard } from "../utils";
 import { loadCookie, saveCookie } from "../utils";
 import { iohookScript } from "../iohook";
 import { styles } from "../styles";
+import path from "path";
 import os from "os";
 
 const cookies = loadCookie();
@@ -45,10 +46,10 @@ export class SettingView extends React.Component<Props, State> {
   public computeHeight(options: Array<OptionT>) {
     let height = 160;
     for (let i = 0; i < options.length; i++) {
-      height = height + (isWin ? 240 : 270);
+      height = height + (isWin ? 250 : 270);
       const item = options[i];
       for (let n = 0; n < item.notices.length; n++) {
-        height = height + (isWin ? 130 : 140);
+        height = height + 140;
       }
     }
     return height;
@@ -146,6 +147,7 @@ export class SettingView extends React.Component<Props, State> {
     }
     const file = value[0];
     this.changePerformEvent(parentid, index, "file_path", file);
+    this.forceUpdate();
   };
 
   public render() {
@@ -330,6 +332,11 @@ export class SettingView extends React.Component<Props, State> {
                           <Text style={styles.setting_text}>
                             音频/脚本路径:
                           </Text>
+                          {notice.file_path ? (
+                            <Text style={"margin-right: 3px;max-width: 160px;"}>
+                              {path.basename(notice.file_path)}
+                            </Text>
+                          ) : null}
                           <Button
                             text={"选择文件"}
                             on={{ clicked: () => this.selectFile(i, index) }}

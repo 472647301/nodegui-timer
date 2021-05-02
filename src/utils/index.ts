@@ -3,8 +3,11 @@ import path from "path";
 import { decode, encode } from "js-base64";
 import { ButtonRole, QMessageBox, QPushButton } from "@nodegui/nodegui";
 import { options } from "../config";
+import os from "os";
 
-const filePath = path.resolve(__dirname, "../cookies.txt");
+export const homedir = path.resolve(os.homedir(), "Documents/ByronTimer");
+
+const filePath = path.resolve(homedir, "../cookies.txt");
 
 type Cookies = {
   options: Array<OptionT>;
@@ -13,6 +16,9 @@ type Cookies = {
 };
 
 export function loadCookie(): Cookies {
+  if (!fs.existsSync(homedir)) {
+    fs.mkdirSync(homedir);
+  }
   if (!fs.existsSync(filePath)) {
     return {
       options: options,

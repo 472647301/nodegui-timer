@@ -1,6 +1,6 @@
 import ioHook from "iohook";
 import { QInputDialog } from "@nodegui/nodegui";
-import { keyboard } from "../utils";
+import { keyboard, homedir } from "../utils";
 import { stores } from "../stores";
 import path from "path";
 import fs from "fs";
@@ -78,7 +78,7 @@ class CreateScript {
       if (!this.savename) {
         return;
       }
-      const dir = path.resolve(__dirname, `../scripts`);
+      const dir = path.resolve(homedir, `scripts`);
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir);
       }

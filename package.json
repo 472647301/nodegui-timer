@@ -29,6 +29,7 @@
     "@babel/preset-typescript": "^7.7.7",
     "@nodegui/packer": "^1.4.1",
     "@types/node": "^15.0.1",
+    "@types/shelljs": "^0.8.8",
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^4.0.0-alpha.0",
     "copy-webpack-plugin": "^8.1.1",
@@ -42,13 +43,18 @@
   "dependencies": {
     "@nodegui/nodegui": "^0.30.2",
     "@nodegui/react-nodegui": "^0.12.0",
+    "@richienb/vlc": "^2.0.0",
     "iohook": "^0.6.6",
     "js-base64": "^3.6.0",
     "mobx": "^5.15.4",
     "mobx-react": "^6.2.2",
     "nodegui-stylesheet": "^0.3.0",
+    "open": "^8.0.7",
+    "ow": "^0.17.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "robotjs": "^0.6.0"
+    "robotjs": "^0.6.0",
+    "shelljs": "^0.8.4",
+    "type-fest": "^0.16.0"
   }
 }

@@ -12,6 +12,13 @@ if (os.platform() === "win32") {
         {
           from: iohookPath + "/node-v83-win32-x64/build/Release/uiohook.dll",
         },
+        {
+          from: "./node_modules/vlc-static/bin",
+          to: "./bin",
+        },
+        {
+          from: "./abc.mp3",
+        },
       ],
     })
   );
