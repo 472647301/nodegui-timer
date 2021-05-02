@@ -23,11 +23,11 @@ if (os.platform() === "win32") {
 
 module.exports = {
   mode: process.NODE_ENV || "development",
-  entry: "./src/main.tsx",
+  entry: "./src",
   target: "node",
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "main.js",
+    filename: "index.js",
   },
   module: {
     rules: [

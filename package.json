@@ -2,11 +2,11 @@
   "name": "nodegui-timer",
   "version": "1.0.0",
   "description": "nodegui-timer",
-  "main": "./dist/main.js",
+  "main": "./dist/index.js",
   "scripts": {
     "build": "webpack --mode production",
-    "start": "webpack && qode ./dist/main.js",
-    "debug": "webpack && qode --inspect ./dist/main.js"
+    "start": "webpack && qode ./dist/index.js",
+    "debug": "webpack && qode --inspect ./dist/index.js"
   },
   "repository": {
     "type": "git",
