@@ -55,12 +55,11 @@ export function runNotices(value: number, list: OptionT["notices"]) {
     switch (item.type) {
       case "audio":
         shelljs.cd(path.dirname(item.file_path!));
-        console.log(path.dirname(item.file_path!), path.basename(item.file_path!));
         new Audic(path.basename(item.file_path!)).play();
         break;
       case "keyboard":
-        robot.keyToggle(item.key_code!.toLocaleUpperCase(), "down");
-        robot.keyToggle(item.key_code!.toLocaleUpperCase(), "up");
+        robot.keyToggle(item.key_code!.toLocaleLowerCase(), "down");
+        robot.keyToggle(item.key_code!.toLocaleLowerCase(), "up");
         break;
       case "script":
         const text = fs.readFileSync(item.file_path!, "utf8");
@@ -120,6 +119,7 @@ export class AppState {
         if (!item.display_value && !item.loop) {
           clearInterval(this.timer[name]);
           delete this.timer[name];
+          this.checkEnable();
           return;
         }
         if (item.display_value) {
@@ -130,6 +130,19 @@ export class AppState {
         runNotices(item.display_value, item.notices);
       });
     }, 1000);
+  }
+
+  @action
+  checkEnable() {
+    const list: Array<OptionT> = [];
+    for (let i = 0; i < this.options.length; i++) {
+      if (this.options[i].enable) {
+        list.push(this.options[i]);
+      }
+    }
+    if (list.every((e) => !e.loop && !e.display_value)) {
+      this.enable = false;
+    }
   }
 }
 

@@ -22,7 +22,7 @@ export function loadCookie(): Cookies {
   if (!fs.existsSync(filePath)) {
     return {
       options: options,
-      timer_shortcut: "f5",
+      timer_shortcut: "f2",
       script_shortcut: "f6",
     };
   }
@@ -31,7 +31,7 @@ export function loadCookie(): Cookies {
   if (!data) {
     return {
       options: options,
-      timer_shortcut: "f5",
+      timer_shortcut: "f2",
       script_shortcut: "f6",
     };
   }
